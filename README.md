@@ -1,1 +1,1 @@
-# advent.of.code.24
+# Advent of Code Multi-Year Participation
