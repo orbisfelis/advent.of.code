@@ -5,6 +5,7 @@ class Day2:
         return [line.rstrip() for line in open("2024/Day 2/input.txt", 'r')]
 
     def is_safe(self, report: list) -> bool:
+        # Sort report, check if original is the same in both directions.
         sort = sorted(report)
         if report != sort[::-1] and report != sort:
             return False
@@ -13,7 +14,12 @@ class Day2:
     def is_safe_with_dampener(self, report: list) -> bool:
         if self.is_safe(report):
             return True
-        # Need to use backtracking here.
+        # Very inefficient - check with every possible item removed. n^2
+        for idx, _ in enumerate(report):
+            subreport = report.copy()
+            subreport.pop(idx)
+            if self.is_safe(subreport):
+                return True
         return False
 
     def part1(self, report_lines: list) -> int:
