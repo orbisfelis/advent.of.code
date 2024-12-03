@@ -35,7 +35,6 @@ class Day3:
                     match = re.match(pattern_match, res)
                     sum += int(match.group(1)) * int(match.group(2))
         print(sum)
-    1
 
 def main():
     solution = Day3()
