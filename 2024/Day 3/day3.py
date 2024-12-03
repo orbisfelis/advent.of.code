@@ -3,7 +3,7 @@ import re
 class Day3:
 
     def read_lines(self, filepath: str) -> list:
-        return [line.rstrip() for line in open("2024/Day 3/input.txt", 'r')]
+        return [line.rstrip() for line in open(filepath, 'r')]
     
     def part1(self, report_lines: list):
         pattern = re.compile("mul\(\d+,\d+\)")

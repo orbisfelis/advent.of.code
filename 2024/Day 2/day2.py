@@ -2,7 +2,7 @@
 class Day2:
 
     def read_lines(self, filepath: str) -> list:
-        return [line.rstrip() for line in open("2024/Day 2/input.txt", 'r')]
+        return [line.rstrip() for line in open(filepath, 'r')]
 
     def is_safe(self, report: list) -> bool:
         # Sort report, check if original is the same in both directions.
