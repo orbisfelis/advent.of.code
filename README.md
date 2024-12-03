@@ -1,1 +1,1 @@
-# Advent of Code Multi-Year Participation
+# Advent of Code
