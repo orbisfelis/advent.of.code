@@ -5,7 +5,7 @@ class Day4:
     def read_lines(self, filepath: str) -> list:
         return [line.rstrip() for line in open(filepath, 'r')]
     
-    def part1(self, puzzle: list, words: list):
+    def part1(self, puzzle: list):
         R, C = len(puzzle), len(puzzle[0])
 
         def checkWord(row, col, row_end, col_end, diag=False):
@@ -38,12 +38,39 @@ class Day4:
         print(res)
 
     def part2(self, puzzle: list):
-        pass
+        R, C = len(puzzle), len(puzzle[0])
+
+        def checkWord(row, col):
+            if (min(row-1, col-1) < 0 or
+                row+1 >= R or col+1 >= C):
+                return 0
+
+            rightBottom = puzzle[row+1][col+1]
+            leftTop = puzzle[row-1][col-1]
+            leftBottom = puzzle[row+1][col-1]
+            rightTop = puzzle[row-1][col+1]
+
+            for side in [rightTop, leftBottom, leftTop, rightBottom]:
+                if side not in ['M', 'S']:
+                    return 0
+            
+            if (((rightTop == 'M' and leftBottom == 'S') or (rightTop == 'S' and leftBottom == 'M')) and
+                ((leftTop == 'M' and rightBottom == 'S') or (leftTop == 'S' and rightBottom == 'M'))):
+                return 1
+            else:
+                return 0
+
+        res = 0
+        for r in range(R):
+            for c in range(C):
+                if puzzle[r][c] == 'A':
+                    res += checkWord(r, c)
+        print(res)
 
 def main():
     solution = Day4()
     puzzle = solution.read_lines("2024/Day 4/input.txt")
-    solution.part1(puzzle, ['XMAS'])
+    solution.part1(puzzle)
     solution.part2(puzzle)
 
 main()
