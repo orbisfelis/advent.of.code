@@ -1,6 +1,6 @@
 from functools import cmp_to_key
 
-class Day4:
+class Day5:
 
     def read_lines(self, filepath: str) -> list:
         return [line.rstrip() for line in open(filepath, 'r')]
@@ -36,7 +36,7 @@ class Day4:
         print(sum)
 
 def main():
-    solution = Day4()
+    solution = Day5()
     file = solution.read_lines("2024/Day5/test_input.txt")
     rules_post = {}
     print_order = []
