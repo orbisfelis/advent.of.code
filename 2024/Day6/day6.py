@@ -79,7 +79,7 @@ class Day6:
         else:
             return self.do_slow_move(first_dir, first_loc, puzzle)
     
-    def part1(self):
+    def original_guard_path(self):
         solution = deepcopy(self.PUZZLE_MAP)
         current_loc = self.get_start_loc()
         current_dir = self.get_direction(current_loc)
@@ -87,7 +87,10 @@ class Day6:
         while current_loc:
             solution[current_loc[0]][current_loc[1]] = 'X'
             current_dir, current_loc = self.do_slow_move(current_dir, current_loc)
-
+        return solution
+    
+    def part1(self):
+        solution = self.original_guard_path()
         print(self.calculate_solution(solution))
 
     def run_paradox_simulation(self, puzzle: list[list]):
@@ -127,12 +130,36 @@ class Day6:
                         solution_locations.append(loc)
                     obstructed_puzzle[idx_r][idx_c] = '.'
         print(len(solution_locations))
+    
+    def part2_optimized(self):
+        '''
+            Only possible placement of obstacles is along the original path of the guard.
+            Use those locations to narrow it down.
+        '''
+        part1_solution = self.original_guard_path()
+        part1_solutions_locs = []
+        for idx_r, row in enumerate(part1_solution):
+            for idx_c, col in enumerate(row):
+                if col == 'X':
+                    part1_solutions_locs.append((idx_r, idx_c))
+        solution_locations = []
+        obstructed_puzzle = deepcopy(self.PUZZLE_MAP)
+        for locs in part1_solutions_locs:
+            idx_r, idx_c = locs
+            if obstructed_puzzle[idx_r][idx_c] == '.':
+                obstructed_puzzle[idx_r][idx_c] = 'O'
+                loc = self.run_paradox_simulation(obstructed_puzzle)
+                if loc:
+                    solution_locations.append(loc)
+                obstructed_puzzle[idx_r][idx_c] = '.'
+        print(len(solution_locations))
 
 def main():
     solution = Day6()
     puzzle_map = solution.read_lines("2024/Day6/input.txt")
     solution.PUZZLE_MAP = puzzle_map
     solution.part1()
-    solution.part2()
+    # solution.part2()
+    solution.part2_optimized()
 
 main()
