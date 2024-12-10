@@ -1,7 +1,6 @@
 from collections import defaultdict
-class Day10:
 
-    THE_MAP = None
+class Day10:
 
     def parse_input(self, filepath: str) -> list:
         return [list(map(int, list(item))) for item in [line.rstrip() for line in open(filepath, 'r')]]
