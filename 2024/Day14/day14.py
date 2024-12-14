@@ -69,7 +69,7 @@ class Day14:
             robots[robot_id] = {'p': (new_x, new_y), 'v': velocity}
         return robots
     
-    def render_robot_locations(self, robots, grid_x, grid_y):
+    def render_robot_locations(self, robots):
         data = []
         for robot_id, details in robots.items():
             data.append(details['p'])
@@ -91,7 +91,7 @@ class Day14:
                 safety_factor, quadrant_counts = self.count_quadrants(updated_positions, grid_x, grid_y)
                 if any((lambda x: x for x in quadrant_counts.values() if x > 250)):
                     print(f"A Christmas Tree materializes! Seconds elapsed: {_}, Quadrant counts: {quadrant_counts}")
-                    self.render_robot_locations(updated_positions, grid_x, grid_y)
+                    self.render_robot_locations(updated_positions)
         if not part2:
             print(updated_positions)
             print(self.count_quadrants(updated_positions, grid_x, grid_y)[0])
