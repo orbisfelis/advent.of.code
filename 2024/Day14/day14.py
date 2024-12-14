@@ -1,10 +1,17 @@
 import re
 import math
 from copy import deepcopy
+from enum import Enum
 
 import matplotlib.pyplot as plt
 from matplotlib import colors
 import numpy as np
+
+class Quadrant(Enum):
+    TOP_LEFT = 'TOP_LEFT'
+    TOP_RIGHT = 'TOP_RIGHT'
+    BOTTOM_LEFT = 'BOTTOM_LEFT'
+    BOTTOM_RIGHT = 'BOTTOM_RIGHT'
 
 class Day14:
 
@@ -25,19 +32,22 @@ class Day14:
         mid_x = grid_x // 2
         mid_y = grid_y // 2
 
-        quadrant_counts = {'TOPLEFT': 0, 'TOPRIGHT': 0, 'BOTTOMLEFT': 0, 'BOTTOMRIGHT': 0}
+        quadrant_counts = {Quadrant.TOP_LEFT: 0,
+                           Quadrant.TOP_RIGHT: 0,
+                           Quadrant.BOTTOM_LEFT: 0,
+                           Quadrant.BOTTOM_RIGHT: 0}
 
         for robot_id, details in robots.items():
             position = details['p']
             if position[0] == mid_x or position[1] == mid_y: continue
             if position[0] < mid_x and position[1] < mid_y:
-                quadrant_counts['TOPLEFT'] += 1
+                quadrant_counts[Quadrant.TOP_LEFT] += 1
             elif position[0] < mid_x and position[1] > mid_y:
-                quadrant_counts['TOPRIGHT'] += 1
+                quadrant_counts[Quadrant.TOP_RIGHT] += 1
             elif position[0] > mid_x and position[1] < mid_y:
-                quadrant_counts['BOTTOMLEFT'] += 1
+                quadrant_counts[Quadrant.BOTTOM_LEFT] += 1
             elif position[0] > mid_x and position[1] > mid_y:
-                quadrant_counts['BOTTOMRIGHT'] += 1
+                quadrant_counts[Quadrant.BOTTOM_RIGHT] += 1
         
         safety_score = math.prod(quadrant_counts.values())
         return safety_score, quadrant_counts
