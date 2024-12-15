@@ -45,8 +45,8 @@ class Day15:
         next_loc = self.CURRENT_GRID[next_loc_idx[0]][next_loc_idx[1]]
         if next_loc == "#":
             return current_loc_idx, False
-        
-        if current_val == "@":
+
+        if current_val in ["@", "O"]:
             if next_loc == '.':
                 self.CURRENT_GRID[next_loc_idx[0]][next_loc_idx[1]] = current_val
                 self.CURRENT_GRID[current_loc_idx[0]][current_loc_idx[1]] = prev_val
@@ -56,20 +56,8 @@ class Day15:
                 if not movement:
                     return current_loc_idx, False
                 else:
-                    # self.CURRENT_GRID[next_loc_idx[0]][next_loc_idx[1]] = current_val
-                    self.CURRENT_GRID[current_loc_idx[0]][current_loc_idx[1]] = prev_val
-                    return next_loc_idx, True
-        elif current_val == "O":
-            if next_loc == '.':
-                self.CURRENT_GRID[next_loc_idx[0]][next_loc_idx[1]] = current_val
-                self.CURRENT_GRID[current_loc_idx[0]][current_loc_idx[1]] = prev_val
-                return next_loc_idx, True
-            elif next_loc == 'O':
-                next_loc_idx, movement = self.move_in_direction(next_loc_idx, "O", current_val, move)
-                if not movement:
-                    return current_loc_idx, False
-                else:
-                    self.CURRENT_GRID[next_loc_idx[0]][next_loc_idx[1]] = current_val
+                    if current_val != "@":
+                        self.CURRENT_GRID[next_loc_idx[0]][next_loc_idx[1]] = current_val
                     self.CURRENT_GRID[current_loc_idx[0]][current_loc_idx[1]] = prev_val
                     return next_loc_idx, True
         
