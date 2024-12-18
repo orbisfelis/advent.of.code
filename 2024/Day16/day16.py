@@ -1,5 +1,5 @@
 from enum import Enum
-from collections import deque
+from collections import deque, defaultdict
 
 class Direction(Enum):
     UP = (-1, 0)
@@ -32,7 +32,7 @@ class Day16:
                 Direction.LEFT: [Direction.UP, Direction.DOWN],
                 Direction.RIGHT: [Direction.UP, Direction.DOWN]}
 
-    def part1(self):
+    def solution(self):
         start_r_idx, start_c_idx = self.get_start()
         results = list()
 
@@ -41,14 +41,14 @@ class Day16:
             visit = set()
             scores = dict()
             visit.add((start_r, start_c))
-            q.append((start_r, start_c, None, curr_direction, 0))
+            q.append((start_r, start_c, [], curr_direction, 0))
 
             while q:
-                row, col, prev_item, curr_direction, curr_score = q.pop()
-                print((row, col, prev_item, curr_direction, curr_score))
+                row, col, prev_items, curr_direction, curr_score = q.popleft()
+                # print((row, col, prev_items, curr_direction))
 
                 if self.CURRENT_GRID[row][col] == "E":
-                    results.append(curr_score)
+                    results.append((curr_score, prev_items))
                     continue
 
                 directions = [Direction.DOWN, Direction.UP, Direction.LEFT, Direction.RIGHT]
@@ -59,21 +59,30 @@ class Day16:
                         new_score = curr_score + 1
                         if dir in self.get_neighbors()[curr_direction]:
                             new_score += 1000
-                            if prev_item:
+                            if prev_items:
+                                prev_item = prev_items[-1]
                                 scores[(prev_item[0], prev_item[1])] += 1000
                         scores[(row, col)] = new_score
                         if ((r, c) not in visit or scores.get((r, c), float("infinity")) > new_score):
                             visit.add((r, c))
-                            q.append((r, c, (row, col), dir, new_score))
+                            path = prev_items.copy()
+                            path.append((row, col))
+                            q.append((r, c, path, dir, new_score))
             return
 
         bfs(start_r_idx, start_c_idx, Direction.RIGHT)
-        print(min(results))
+        min_res = min([val[0] for val in results])
+        print(f"Part 1: {min_res}")
+        new_res = [res for res in results if res[0] == min_res]
+        final_res = []
+        for test in new_res:
+            final_res = final_res + test[1]
+        print(f"Part 2: {len(list(set(final_res))) + 1}")
 
 def main():
     solution = Day16()
     grid = solution.parse_input("2024/Day16/input.txt")
     solution.CURRENT_GRID = grid
-    solution.part1()
+    solution.solution()
 
 main()
