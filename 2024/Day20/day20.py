@@ -1,6 +1,7 @@
 import itertools
 from enum import Enum
 from collections import deque
+from typing import List, Tuple, Dict
 
 class Direction(Enum):
     UP = (-1, 0)
@@ -10,22 +11,22 @@ class Direction(Enum):
 
 class Day20:
 
-    def parse_input(self, filepath: str) -> list:
+    def parse_input(self, filepath: str) -> List[str]:
         return [list(item) for item in [line.rstrip() for line in open(filepath, 'r')]]
     
-    def get_start(self, grid):
+    def get_start(self, grid: List[List[str]]) -> Tuple[int, int]:
         for idx_r, row in enumerate(grid):
             for idx_c, col in enumerate(row):
                 if col == "S":
                     return (idx_r, idx_c)
     
-    def get_end(self, grid):
+    def get_end(self, grid: List[List[str]]) -> Tuple[int, int]:
         for idx_r, row in enumerate(grid):
             for idx_c, col in enumerate(row):
                 if col == "E":
                     return (idx_r, idx_c)
     
-    def generate_scores(self, grid):
+    def generate_scores(self, grid: List[List[str]]) -> Dict[Tuple[int, int], int]:
         r, c = self.get_start(grid)
         R, C = len(grid), len(grid[0])
         q = deque()
@@ -51,7 +52,7 @@ class Day20:
                     scores[(r, c)] = new_score
         return
 
-    def find_cheats(self, scores, pico=2):
+    def find_cheats(self, scores: Dict[Tuple[int, int], int], pico: int = 2) -> Dict[Tuple[Tuple[int, int], Tuple[int, int]], int]:
         '''
             Pre-calculated scores for each step in the maze.
             For each position, get furthest position reachable within X seconds.
@@ -68,7 +69,7 @@ class Day20:
         return cheats
 
 
-    def solution(self, scores, threshold, pico):
+    def solution(self, scores: Dict[Tuple[int, int], int], threshold: int, pico: int):
         cheats = self.find_cheats(scores, pico)
         cheat_counts = 0
         for cheat_count in cheats.values():
