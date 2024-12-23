@@ -49,6 +49,36 @@ class Day23:
         password = ",".join(password_l)
         print(password)
 
+    def part2_non_nx(self, adj_list):
+        nodes = defaultdict(set)
+        for k, v in adj_list.items():
+            nodes[k] = set(v)
+
+        def bron_kerbosch(p, r=None, x=None):
+            '''
+                https://en.wikipedia.org/wiki/Bron–Kerbosch_algorithm
+                With pivoting method.
+
+                yield from - same as doing:
+                for y in list:
+                    yield y
+            '''
+            p = set(p)
+            r = set() if r is None else r
+            x = set() if x is None else x
+            if not p and not x:
+                yield r
+            while p:
+                v = p.pop()
+                yield from bron_kerbosch(
+                    p=p.intersection(nodes[v]), r=r.union([v]), x=x.intersection(nodes[v]))
+                x.add(v)
+
+        computers = nodes.keys()
+        max_cliques = list(bron_kerbosch(computers))
+        password_l = sorted(max(max_cliques, key=len))
+        password = ",".join(password_l)
+        print(password)
     
 def main():
     solution = Day23()
@@ -56,5 +86,6 @@ def main():
     adj_list = solution.build_adjacency_list(inputs)
     solution.part1(adj_list)
     solution.part2(inputs)
+    solution.part2_non_nx(adj_list)
 
 main()
